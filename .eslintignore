@@ -1,0 +1,3 @@
+public/**/*.js
+src/supported-browsers.js
+src/steam/bindings/PlayFabClientApi.js
