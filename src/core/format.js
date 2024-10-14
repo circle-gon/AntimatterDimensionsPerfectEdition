@@ -1,3 +1,6 @@
+/* eslint-disable no-param-reassign */
+import { numbered } from "./blind";
+
 function isEND() {
   const threshold = GameEnd.endState > END_STATE_MARKERS.END_NUMBERS
     ? 1
@@ -9,7 +12,7 @@ function isEND() {
 // eslint-disable-next-line max-params
 window.format = function format(value, places = 0, placesUnder1000 = 0, bypassEND = false) {
   if (isEND() && !bypassEND) return "END";
-  return Notations.current.format(value, places, placesUnder1000, 3);
+  return Notations.current.format(numbered(value), places, placesUnder1000, 3);
 };
 
 window.formatInt = function formatInt(value, bypassEND = false) {
@@ -19,6 +22,7 @@ window.formatInt = function formatInt(value, bypassEND = false) {
   if (Notations.current.isPainful && Notations.current.name !== "Standard") {
     return format(value, 2);
   }
+  value = numbered(value)
   return formatWithCommas(typeof value === "number" ? value.toFixed(0) : value.toNumber().toFixed(0));
 };
 
@@ -27,7 +31,7 @@ window.formatFloat = function formatFloat(value, digits, bypassEND = false) {
   if (Notations.current.isPainful) {
     return format(value, Math.max(2, digits), digits);
   }
-  return formatWithCommas(value.toFixed(digits));
+  return formatWithCommas(numbered(value).toFixed(digits));
 };
 
 // eslint-disable-next-line max-params
@@ -40,7 +44,7 @@ window.formatPostBreak = function formatPostBreak(value, places, placesUnder1000
     return notation.infinite;
   }
 
-  const decimal = Decimal.fromValue_noAlloc(value);
+  const decimal = numbered(Decimal.fromValue_noAlloc(value));
 
   if (decimal.exponent < -300) {
     return decimal.sign() < 0
@@ -94,15 +98,15 @@ window.formatMachines = function formatMachines(realPart, imagPart, bypassEND = 
 };
 
 window.timeDisplay = function timeDisplay(ms) {
-  return TimeSpan.fromMilliseconds(ms).toString();
+  return TimeSpan.fromMilliseconds(numbered(ms)).toString();
 };
 
 window.timeDisplayNoDecimals = function timeDisplayNoDecimals(ms) {
-  return TimeSpan.fromMilliseconds(ms).toStringNoDecimals();
+  return TimeSpan.fromMilliseconds(numbered(ms)).toStringNoDecimals();
 };
 
 window.timeDisplayShort = function timeDisplayShort(ms) {
-  return TimeSpan.fromMilliseconds(ms).toStringShort();
+  return TimeSpan.fromMilliseconds(numbered(ms)).toStringShort();
 };
 
 const commaRegexp = /\B(?=(\d{3})+(?!\d))/gu;

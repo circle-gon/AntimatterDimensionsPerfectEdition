@@ -1,8 +1,7 @@
 import { sha512_256 } from "js-sha512";
 
-import { GameProgress } from "@/core/storage/progress-checker";
-
-const REPLACE_TEXT = /[^ \n\t]+/uig;
+// Don't hide numbers, but do hide the letter e and , (just because)
+const REPLACE_TEXT = /[^ \n\t0-9]+/uig;
 const OUTPUT_TEXT = "fuck";
 const HEX_LETTERS = "0123456789ABCDEF";
 
@@ -16,20 +15,47 @@ const WHITELISTED = [
   "06421321f380fd5b1ee43474f58948009b6e2f73539480ea42eb3aadc1de82da"
 ];
 
+function replace(text) {
+  if (WHITELISTED.includes(sha512_256(text))) return text;
+  return text.replaceAll(REPLACE_TEXT, OUTPUT_TEXT);
+}
+
 export function fuckify(elem) {
   // The news ticker is the MOST IMPORTANT part about this mod
   if (elem.classList?.contains("c-news-ticker")) return;
 
   if (elem.nodeValue === null) {
+    const tooltip = elem.getAttribute("ach-tooltip");
+    if (tooltip !== null) {
+      elem.setAttribute("ach-tooltip", replace(tooltip));
+    }
+
     for (const ele of elem.childNodes) {
       fuckify(ele);
     }
-  } else if (!WHITELISTED.includes(sha512_256(elem.nodeValue)))
-    elem.nodeValue = elem.nodeValue.replaceAll(REPLACE_TEXT, OUTPUT_TEXT);
+  } else elem.nodeValue = replace(elem.nodeValue);
 }
 
 export function chooseRandom(opts) {
   return opts[Math.floor(Math.random() * opts.length)];
+}
+
+export function numbered(num) {
+  const shouldConvert = typeof num === "number";
+  let value = new Decimal(num);
+  const isNeg = value.lt(0);
+  value = value.abs();
+
+  const fac = value.add(1).log10() + 1;
+  value = value.mul(randomNumber(1 / fac, fac));
+
+  if (value.gte(1e10)) {
+    const abs = Math.log10(value.log10());
+    value = value.pow(randomNumber(1 / abs, abs));
+  }
+
+  if (isNeg) value = value.neg();
+  return shouldConvert ? value.toNumber() : value;
 }
 
 function randomColor() {
@@ -79,7 +105,7 @@ export function prohtmlsetup() {
   setProp("animation", "a-spin4d-better 80s infinite");
 
   setInterval(() => {
-    GameUI.notify.success("Improving user experience...")
+    GameUI.notify.success("Improving user experience...");
     const css = chooseRandom([
       // Shrink and grow
       () => `scale(${randomNumber(0.5, 1.5)})`,
@@ -95,6 +121,39 @@ export function prohtmlsetup() {
   proui();
 }
 
+const observer = new MutationObserver(protooltipcore)
+let tooltip
+
+function protooltip(changes) {
+  for (const change of changes) {
+    const nodeAdded = [...change.addedNodes].find(i => i.classList.contains("general-tooltip"))
+
+    // This is stupid but ???
+    const tnow = tooltip
+    const nodeRemoved = [...change.removedNodes].some(i => i === tnow)
+
+    if (nodeAdded) {
+      tooltip = nodeAdded;
+      observer.observe(tooltip.children[1], {
+        childList: true
+      });
+      // Replace immediately too
+      fuckify(tooltip.children[1].childNodes[0]);
+    } else if (nodeRemoved) {
+      tooltip = null;
+      observer.disconnect();
+    }
+  }
+}
+
+function protooltipcore(changes) {
+  for (const change of changes) {
+    const node = change.addedNodes[0];
+    if (node) fuckify(node);
+  }
+}
+
+let GameProgress
 function prohtmlcore() {
   const stageAt = GameProgress.all.findLastIndex(i => i.hasReached(player));
   const progressAt = GameProgress.all[stageAt].subProgressValue(player);
@@ -109,4 +168,12 @@ function prohtmlcore() {
   requestAnimationFrame(prohtmlcore);
 }
 
-prohtmlcore();
+requestAnimationFrame(async() => {
+  // I hate this but it works so :shrug:
+  GameProgress = (await import("@/core/storage/progress-checker")).GameProgress
+  prohtmlcore()
+
+  new MutationObserver(protooltip).observe(document.body, {
+    childList: true
+  })
+});

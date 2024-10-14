@@ -11,9 +11,10 @@ import { supportedBrowsers } from "./supported-browsers";
 
 import Payments from "./core/payments";
 import { chooseRandom, prohtmlsetup, randomNumber } from "./core/blind";
-import loading1 from "/images/loading.png"
-import loading2 from "/images/loading2.webp"
-import loading3 from "/images/loading3.png"
+
+import loading1 from "/images/loading.png";
+import loading2 from "/images/loading2.webp";
+import loading3 from "/images/loading3.png";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -419,7 +420,7 @@ export function realTimeMechanics(realDiff) {
   return false;
 }
 
-const SPEEDUP_FACTOR = 1.1
+const SPEEDUP_FACTOR = 1.1;
 
 // "passDiff" is in ms. It is only unspecified when it's being called normally and not due to simulating time, in which
 // case it uses the gap between now and the last time the function was called (capped at a day). This is on average
@@ -1102,28 +1103,44 @@ function trueLoad() {
   document.title = chooseRandom(TITLES);
 }
 
+function fail() {
+  console.error(new TypeError("Segmentation fault; core dumped"));
+  alert("Something went wrong... restarting...");
+  document.getElementById("start").style.display = "none";
+  hasFailed = true;
+  lazyLoad();
+}
+
 const IMAGES = [
   loading1,
   loading2,
   loading3
 ];
 
-const TIME_TO_LOAD = randomNumber(20, 40) * 1000;
+const LOADING_MESSAGES = [
+  "Loading",
+  "Downloading",
+  "Decompressing",
+  "Checking Integrity",
+  "Compiling",
+  "Loading"
+];
+const LOADING_TIMES = Array(LOADING_MESSAGES.length - 1).fill().map(() => Math.random()).sort((a, b) => a - b);
+LOADING_TIMES.unshift(0);
+
+const TIME_TO_LOAD = randomNumber(20, 40) / 10;
+let hasFailed = false;
 function lazyLoad() {
   // Bad code but whatever
-  const root = document.getElementById("loading");
-  const core = root.firstElementChild;
-  const text = core.children[0];
-  const prog = core.children[1];
+  const root = document.getElementById("message");
+  const text = root.children[0];
+  const prog = root.children[1];
   let progress = 0;
   let last = Date.now();
 
-  root.style.backgroundImage = `url("${chooseRandom(IMAGES)}")`;
-  root.style.display = "block";
-
   function load() {
     const now = Date.now();
-    const diff = now - last;
+    const diff = (now - last) / 1000;
     last = now;
     progress += diff;
 
@@ -1132,16 +1149,27 @@ function lazyLoad() {
       console.error(new TypeError("Boi you fukked up: loading is NOT WORKING"));
     }
 
-    if (progress >= TIME_TO_LOAD) trueLoad();
-    else {
-      const to = Math.log10(progress + 10) / Math.log10(TIME_TO_LOAD + 10) * 100;
-      text.innerText = `${to.toFixed(2)}%`;
-      prog.style.width = `${to}%`;
-      requestAnimationFrame(load);
+    if (progress >= TIME_TO_LOAD) {
+      document.getElementById("start").style.display = "flex";
+    } else {
+      const to = Math.min(Math.log10(progress + 1) / Math.log10(TIME_TO_LOAD), 1) * 100;
+
+      // Don't show the screen more than once
+      if (!hasFailed && to >= 99.5 && Math.random() < 0.1) {
+        document.getElementById("loading").style.display = "none";
+        setTimeout(() => {
+          document.getElementById("loading").style.display = "block";
+          fail();
+        }, 100);
+      } else {
+        const message = LOADING_TIMES.findLastIndex(i => to / 100 >= i);
+        text.innerText = `${LOADING_MESSAGES[message]}... ${to.toFixed(2)}%`;
+        prog.style.width = `${to}%`;
+        requestAnimationFrame(load);
+      }
     }
   }
-
-  setTimeout(load, 400);
+  load();
 }
 
 export function init() {
@@ -1151,7 +1179,16 @@ export function init() {
     // eslint-disable-next-line no-console
     console.log("👨‍💻 Development Mode 👩‍💻");
   }
-  lazyLoad();
+
+  document.getElementById("start").onclick = () => {
+    if (Math.random() < 0.5 || hasFailed) trueLoad();
+    else fail();
+  };
+  const root = document.getElementById("loading");
+  root.style.backgroundImage = `url("${chooseRandom(IMAGES)}")`;
+  root.style.display = "block";
+
+  setTimeout(lazyLoad, 1000);
 }
 
 window.tweenTime = 0;
