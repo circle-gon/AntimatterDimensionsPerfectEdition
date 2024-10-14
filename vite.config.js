@@ -16,5 +16,8 @@ export default defineConfig(({ mode }) => {
       },
       extensions: [".js", ".vue"]
     },
+    build: {
+      sourcemap: true
+    }
   };
 });
