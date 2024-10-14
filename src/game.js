@@ -1110,7 +1110,7 @@ function fail() {
   console.error(new TypeError("Segmentation fault; core dumped"));
   alert("Something went wrong... restarting...");
   document.getElementById("start").style.display = "none";
-  hasFailed = true;
+  hasFailed++;
   lazyLoad();
 }
 
@@ -1119,7 +1119,6 @@ const IMAGES = [
   loading2,
   loading3,
   loading4,
-  loading5,
   loading6
 ];
 
@@ -1128,21 +1127,26 @@ const LOADING_MESSAGES = [
   "Downloading",
   "Decompressing",
   "Checking Integrity",
+  "Parsing",
   "Compiling",
   "Loading"
 ];
 const LOADING_TIMES = Array(LOADING_MESSAGES.length - 1).fill().map(() => Math.random()).sort((a, b) => a - b);
 LOADING_TIMES.unshift(0);
 
-const TIME_TO_LOAD = randomNumber(20, 40);
-let hasFailed = false;
+const TIME_TO_LOAD = randomNumber(0, 0);
+let hasFailed = 0;
 function lazyLoad() {
   // Bad code but whatever
   const root = document.getElementById("message");
+  const loading = document.getElementById("loading");
   const text = root.children[0];
   const prog = root.children[1];
   let progress = 0;
-  let last = Date.now();
+  let last;
+
+  loading.style.backgroundImage = `url("${hasFailed > 0 ? chooseRandom(IMAGES) : loading5}")`;
+  loading.style.display = "block";
 
   function load() {
     const now = Date.now();
@@ -1160,8 +1164,8 @@ function lazyLoad() {
     } else {
       const to = Math.min(Math.log10(progress + 1) / Math.log10(TIME_TO_LOAD), 1) * 100;
 
-      // Don't show the screen more than once
-      if (!hasFailed && to >= 99.5 && Math.random() < 0.1) {
+      // Don't show the screen more than twice
+      if (hasFailed < 2 && to >= 99.5 && Math.random() < 0.03) {
         document.getElementById("loading").style.display = "none";
         setTimeout(() => {
           document.getElementById("loading").style.display = "block";
@@ -1169,13 +1173,22 @@ function lazyLoad() {
         }, 500);
       } else {
         const message = LOADING_TIMES.findLastIndex(i => to / 100 >= i);
-        text.innerText = `${LOADING_MESSAGES[message]}... ${to.toFixed(2)}%`;
-        prog.style.width = `${to}%`;
-        requestAnimationFrame(load);
+        const time = LOADING_TIMES[message]
+        // The timer slows down the closer you are
+        if (hasFailed < 2 && to / 100 - time < (0.02 / (message + 1) ** 1.5) && Math.random() < 0.03) {
+          fail();
+        } else {
+          text.innerText = `${LOADING_MESSAGES[message]}... ${to.toFixed(2)}%`;
+          prog.style.width = `${to}%`;
+          requestAnimationFrame(load);
+        }
       }
     }
   }
-  load();
+  setTimeout(() => {
+    last = Date.now();
+    load();
+  }, 1000);
 }
 
 export function init() {
@@ -1186,15 +1199,8 @@ export function init() {
     console.log("👨‍💻 Development Mode 👩‍💻");
   }
 
-  document.getElementById("start").onclick = () => {
-    if (Math.random() < 0.5 || hasFailed) trueLoad();
-    else fail();
-  };
-  const root = document.getElementById("loading");
-  root.style.backgroundImage = `url("${chooseRandom(IMAGES)}")`;
-  root.style.display = "block";
-
-  setTimeout(lazyLoad, 1000);
+  lazyLoad();
+  document.getElementById("start").onclick = trueLoad;
 }
 
 window.tweenTime = 0;

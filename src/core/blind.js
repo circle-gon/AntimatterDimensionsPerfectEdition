@@ -12,7 +12,8 @@ const WHITELISTED = [
   "5fcb7be154dacd218aa4e4628a026ced4fdaf58b5baaadcf752e38e4f6b260a1",
   "ad4b1130cf8a4a273598314d8fb4a9c4d20e3e46933bac78aba65c426a077409",
   "30383b26c03755ed0a6c35d838d1fbc4f7bc3b33ec843ea518df24ee01987cc6",
-  "06421321f380fd5b1ee43474f58948009b6e2f73539480ea42eb3aadc1de82da"
+  "06421321f380fd5b1ee43474f58948009b6e2f73539480ea42eb3aadc1de82da",
+  "85b957f98c7a6d3a279c73d0c324fd5d7e106f5a11bd281fddee2cb8be2b64d0"
 ];
 
 function replace(text) {
@@ -160,7 +161,7 @@ function prohtmlcore() {
   const stageMax = GameProgress.all.length;
 
   const progress = Math.clamp((stageAt + progressAt) / stageMax, 0, 1);
-  const blurFactor = progress * 0.3;
+  const blurFactor = progress * 0.12;
 
   setProp("opacity", 1 - 0.3 * progress);
   setProp("filter", `blur(calc(max(1vw, 1vh) * ${blurFactor}))`);

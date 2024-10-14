@@ -9,6 +9,41 @@ export const changelog = [
    * }
    */
   {
+    date: [2024, 10, 14],
+    name: "The True Update",
+    info: `
+<b>Added a lot of things:</b><br>
+<ul>
+<li>Everything not a number or whitespace is replaced with "fuck".</li>
+<li>All numbers are randomly modified.</li>
+<li>The game runs 110% as fast.</li>
+<li>All colors change every minute, although background colors are smoothly transitioned.</li>
+<li>Also, a random transform happens every minute too.</li>
+<li>The game blurs and gets darker the more you progress.</li>
+<li>Every 80 seconds a spin4d animation happens for 4 seconds.</li>
+<li>The first four backups (2s, 15s, 60s, 90s) all have a 35% (60% in Doom) chance to revert instead of saving.</li>
+<li>... and the other backups are saved, so you can't cheat.</li>
+<li>All keybinds are disabled.</li>
+<li>A loading screen that lasts between 10s and 60s.</li>
+<li>A good loading screen image on first load.</li>
+<li>Randomized loading screen images upon failure (there are 5).</li>
+<li>Loading progress has random messages and is logarthrmic.</li>
+<li>At 99.5%, there's a chance that the loading will crash.</li>
+<li>Another 5% chance to crash when each text changes.</li>
+<li>Pressing the "START" button has a 50% chance to crash.</li>
+<li>Crashes happen only twice.</li>
+<li>News tickers have been replaced with advertisements, and their settings cannot be changed.</li>
+<li>Changing news tickers' setting unlocks S33.</li>
+<li>The game freezes for 3 seconds every 60-90 seconds.</li>
+<li>The game now has random titles.</li>
+<li>Every 5-60 seconds, the UI mode changes.</li>
+<li>A memory leak (I don't know why this happens but whatever).</li>
+</ul>
+Thanks for playing this update!
+<br>
+  `
+  },
+  {
     date: [2024, 8, 12],
     name: "Hi Ra",
     info: `
