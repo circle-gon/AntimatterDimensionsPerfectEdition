@@ -1134,7 +1134,7 @@ const LOADING_MESSAGES = [
 const LOADING_TIMES = Array(LOADING_MESSAGES.length - 1).fill().map(() => Math.random()).sort((a, b) => a - b);
 LOADING_TIMES.unshift(0);
 
-const TIME_TO_LOAD = randomNumber(0, 0);
+const TIME_TO_LOAD = randomNumber(10, 60);
 let hasFailed = 0;
 function lazyLoad() {
   // Bad code but whatever
