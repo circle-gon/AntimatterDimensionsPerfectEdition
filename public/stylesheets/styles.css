@@ -1351,11 +1351,6 @@ br {
   50% { transform: scale(0) rotate3d(5.2, -2.8, 1.4, 360deg); }
 }
 
-@keyframes a-spin4d-better {
-  0%, 5%, 100% { transform: scale(1) rotate3d(5.2, -2.8, 1.4, 0deg); }
-  2.5% { transform: scale(0) rotate3d(5.2, -2.8, 1.4, 360deg); }
-}
-
 @keyframes a-float {
   0% {
     bottom: 0;

@@ -103,8 +103,6 @@ export function prohtmlsetup() {
     setProp("color", randomColor(), "important");
   }, 60000);
 
-  setProp("animation", "a-spin4d-better 80s infinite");
-
   setInterval(() => {
     GameUI.notify.success("Improving user experience...");
     const css = chooseRandom([
@@ -118,6 +116,13 @@ export function prohtmlsetup() {
 
     setProp("transform", css);
   }, 60000);
+
+  setInterval(() => {
+    setProp("animation", "a-spin4d 4s");
+    setTimeout(() => {
+      setProp("animation", "");
+    }, 4000);
+  }, 80000);
   profreeze();
   proui();
 }
