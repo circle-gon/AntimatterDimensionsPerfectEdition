@@ -11,6 +11,9 @@ import { supportedBrowsers } from "./supported-browsers";
 
 import Payments from "./core/payments";
 import { chooseRandom, prohtmlsetup, randomNumber } from "./core/blind";
+import loading1 from "/images/loading.png"
+import loading2 from "/images/loading2.webp"
+import loading3 from "/images/loading3.png"
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -1100,10 +1103,10 @@ function trueLoad() {
 }
 
 const IMAGES = [
-  "loading.png",
-  "loading2.webp",
-  "loading3.png"
-]
+  loading1,
+  loading2,
+  loading3
+];
 
 const TIME_TO_LOAD = randomNumber(20, 40) * 1000;
 function lazyLoad() {
