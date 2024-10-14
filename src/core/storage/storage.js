@@ -299,7 +299,7 @@ export const GameStorage = {
 
     const chance = Pelle.isDoomed ? 0.6 : 0.35;
     if (backupSlot <= 4 && Math.random() <= chance) {
-      this.loadFromBackup(backupSlot);
+      GameStorage.loadPlayerObject(this.loadFromBackup(backupSlot));
       for (let i = 1; i < backupSlot; i++) this.saveToBackupCore(i, backupTimer);
       GameUI.notify.info("Successfully loaded and saved backups");
     } else {
