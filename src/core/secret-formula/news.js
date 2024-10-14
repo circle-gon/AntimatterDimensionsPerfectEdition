@@ -29,7 +29,7 @@ export const news = [{
 },
 {
   id: "ad5",
-  text: "Owens & Minor - We’re here for you when it matters"
+  text: "Owens & Minor - We're here for you when it matters"
 },
 {
   id: "ad6",
@@ -69,7 +69,7 @@ export const news = [{
 },
 {
   id: "ad15",
-  text: "NCR - Want to sell stuff physically? We’ve got you, with our POS systems, available now."
+  text: "NCR - Want to sell stuff physically? We've got you, with our POS systems, available now."
 },
 {
   id: "ad16",
@@ -205,9 +205,10 @@ export const news = [{
 },
 {
   id: "ad519",
-  text: "Celestials - For those who aren’t yet religious"
+  text: "Celestials - For those who aren't yet religious"
 },
 {
   id: "ad520",
   text: "Sacrifice - Ever feel like the game is just too slow to make progress? Try Sacrificing, the new hip trend!"
-}]
+}
+]
