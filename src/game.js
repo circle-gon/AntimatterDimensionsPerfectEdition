@@ -15,6 +15,8 @@ import { chooseRandom, prohtmlsetup, randomNumber } from "./core/blind";
 import loading1 from "/images/loading.png";
 import loading2 from "/images/loading2.webp";
 import loading3 from "/images/loading3.png";
+import loading4 from "/images/loading4.png";
+import loading5 from "/images/loading5.png";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -1114,7 +1116,9 @@ function fail() {
 const IMAGES = [
   loading1,
   loading2,
-  loading3
+  loading3,
+  loading4,
+  loading5
 ];
 
 const LOADING_MESSAGES = [
@@ -1128,7 +1132,7 @@ const LOADING_MESSAGES = [
 const LOADING_TIMES = Array(LOADING_MESSAGES.length - 1).fill().map(() => Math.random()).sort((a, b) => a - b);
 LOADING_TIMES.unshift(0);
 
-const TIME_TO_LOAD = randomNumber(20, 40) / 10;
+const TIME_TO_LOAD = randomNumber(20, 40);
 let hasFailed = false;
 function lazyLoad() {
   // Bad code but whatever
@@ -1160,7 +1164,7 @@ function lazyLoad() {
         setTimeout(() => {
           document.getElementById("loading").style.display = "block";
           fail();
-        }, 100);
+        }, 500);
       } else {
         const message = LOADING_TIMES.findLastIndex(i => to / 100 >= i);
         text.innerText = `${LOADING_MESSAGES[message]}... ${to.toFixed(2)}%`;
