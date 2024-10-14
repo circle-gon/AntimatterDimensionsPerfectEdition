@@ -17,6 +17,7 @@ import loading2 from "/images/loading2.webp";
 import loading3 from "/images/loading3.png";
 import loading4 from "/images/loading4.png";
 import loading5 from "/images/loading5.png";
+import loading6 from "/images/loading6.png";
 
 if (GlobalErrorHandler.handled) {
   throw new Error("Initialization failed");
@@ -1118,7 +1119,8 @@ const IMAGES = [
   loading2,
   loading3,
   loading4,
-  loading5
+  loading5,
+  loading6
 ];
 
 const LOADING_MESSAGES = [
