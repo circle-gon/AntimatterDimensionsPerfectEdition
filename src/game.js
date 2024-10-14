@@ -1118,7 +1118,7 @@ function lazyLoad() {
   let progress = 0;
   let last = Date.now();
 
-  root.style.backgroundImage = `url("/images/${chooseRandom(IMAGES)}")`;
+  root.style.backgroundImage = `url("${chooseRandom(IMAGES)}")`;
   root.style.display = "block";
 
   function load() {
