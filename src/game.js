@@ -1106,9 +1106,20 @@ function trueLoad() {
   document.title = chooseRandom(TITLES);
 }
 
+const ERROR_MESSAGES = [
+  [ReferenceError, "player is not defined", "Currency is not defined", "GameEnd is not defined", "news.js is not defined"],
+  [Error, "Loading has failed, retrying", "Save is missing", "Nan'd values found in player save, resetting", "Fuck", "Translation has failed", "dev.spin4d() is not defined"],
+  [SyntaxError, "Missing ) after argument list", "Missing [ before argument list"]
+]
+
 function fail() {
-  console.error(new TypeError("Segmentation fault; core dumped"));
-  alert("Something went wrong... restarting...");
+  const type = chooseRandom(ERROR_MESSAGES)
+  const instance = type[0]
+  const msg = chooseRandom(type.slice(1))
+  const error = new instance(msg)
+
+  console.error(error);
+  alert(error.toString());
   document.getElementById("start").style.display = "none";
   hasFailed++;
   lazyLoad();
