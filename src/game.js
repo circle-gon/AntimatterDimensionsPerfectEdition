@@ -1161,7 +1161,7 @@ function lazyLoad() {
 
   function load() {
     const now = Date.now();
-    const diff = (now - last) / 1000;
+    const diff = Math.min((now - last) / 1000, randomNumber(0.2, 0.5));
     last = now;
     progress += diff;
 
