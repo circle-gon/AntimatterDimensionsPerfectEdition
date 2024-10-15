@@ -107,9 +107,9 @@ export function prohtmlsetup() {
     GameUI.notify.success("Improving user experience...");
     const css = chooseRandom([
       // Shrink and grow
-      () => `scale(${randomNumber(0.5, 1.5)})`,
+      () => `scale(${randomNumber(0.9, 1.1)})`,
       // Move
-      () => `translate(${randomNumber(-0.5, 0.5) * 100}vw, ${randomNumber(-0.5, 0.5) * 100}vh)`,
+      () => `translate(${randomNumber(-0.1, 0.1) * 100}vw, ${randomNumber(-0.1, 0.1) * 100}vh)`,
       // Tilt
       () => `rotate(${randomNumber(-180, 180)}deg)`
     ])();
