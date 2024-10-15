@@ -1186,7 +1186,7 @@ function lazyLoad() {
       // Don't show the screen more than twice
       if (hasFailed < 2 && to >= 99.5 && Math.random() < 0.03) {
         document.getElementById("loading").style.display = "none";
-        setTimeout(() => fail, 500);
+        setTimeout(fail, 500);
       } else {
         const message = LOADING_TIMES.findLastIndex(i => to / 100 >= i);
         const time = LOADING_TIMES[message]
