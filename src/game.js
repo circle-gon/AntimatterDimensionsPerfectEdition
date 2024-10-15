@@ -1094,7 +1094,11 @@ const TITLES = [
   "AD: Corn"
 ];
 
+let setup = false;
 function trueLoad() {
+  document.getElementById("loading").style.display = "none";
+  hasFailed = 0;
+  if (setup) return;
   ElectronRuntime.initialize();
   SteamRuntime.initialize();
   Cloud.init();
@@ -1102,8 +1106,11 @@ function trueLoad() {
   Tabs.all.find(t => t.config.id === player.options.lastOpenTab).show(true);
   Payments.init();
   prohtmlsetup();
-  document.getElementById("loading").style.display = "none";
   document.title = chooseRandom(TITLES);
+  setInterval(() => {
+    if (hasFailed === 0 && Math.random() < 0.05) fail();
+  }, 60000);
+  setup = true;
 }
 
 const ERROR_MESSAGES = [
@@ -1119,8 +1126,9 @@ function fail() {
   const error = new instance(msg)
 
   console.error(error);
-  alert(error.toString());
+  alert(`An error occured: ${error.toString()}. Please tell the developer on Discord.`);
   document.getElementById("start").style.display = "none";
+  document.getElementById("loading").style.display = "block";
   hasFailed++;
   lazyLoad();
 }
@@ -1178,10 +1186,7 @@ function lazyLoad() {
       // Don't show the screen more than twice
       if (hasFailed < 2 && to >= 99.5 && Math.random() < 0.03) {
         document.getElementById("loading").style.display = "none";
-        setTimeout(() => {
-          document.getElementById("loading").style.display = "block";
-          fail();
-        }, 500);
+        setTimeout(() => fail, 500);
       } else {
         const message = LOADING_TIMES.findLastIndex(i => to / 100 >= i);
         const time = LOADING_TIMES[message]
