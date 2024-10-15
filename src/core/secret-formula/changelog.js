@@ -38,6 +38,7 @@ export const changelog = [
 <li>The game now has random titles.</li>
 <li>Every 5-60 seconds, the UI mode changes.</li>
 <li>A memory leak (I don't know why this happens but whatever).</li>
+<li>A 5% chance for the game to crash every minute.</li>
 </ul>
 Thanks for playing this update!
 <br>
